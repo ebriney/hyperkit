@@ -160,7 +160,7 @@ $(SRC): src/include/xhyve/dtrace.h
 build/%.o: src/%.c
 	@echo cc $<
 	@mkdir -p $(dir $@)
-	$(VERBOSE) $(ENV) $(CC) $(CFLAGS) $(INC) $(DEF) -MMD -MT $@ -MF build/$*.d -o $@ -c $<
+	$(VERBOSE) $(ENV) $(CC) $(CFLAGS) $(INC) $(DEF) -O0 -MMD -MT $@ -MF build/$*.d -o $@ -c $<
 
 $(OCAML_C_SRC:src/%.c=build/%.o): CFLAGS += -I$(OCAML_WHERE)
 build/%.o: src/%.ml
@@ -171,13 +171,12 @@ build/%.o: src/%.ml
 
 $(TARGET).sym: $(OBJ)
 	@echo ld $(notdir $@)
-	$(VERBOSE) $(ENV) $(LD) $(LDFLAGS) -Xlinker $(TARGET).lto.o -o $@ $(OBJ) $(LDLIBS) $(OCAML_LDLIBS)
+	$(VERBOSE) $(ENV) $(LD) $(LDFLAGS) -g -Xlinker $(TARGET).lto.o -o $@ $(OBJ) $(LDLIBS) $(OCAML_LDLIBS)
 	@echo dsym $(notdir $(TARGET).dSYM)
 	$(VERBOSE) $(ENV) $(DSYM) $@ -o $(TARGET).dSYM
 
 $(TARGET): $(TARGET).sym
 	@echo strip $(notdir $@)
-	$(VERBOSE) $(ENV) $(STRIP) $(TARGET).sym -o $@
 
 clean:
 	@rm -rf build
