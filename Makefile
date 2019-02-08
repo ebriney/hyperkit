@@ -139,7 +139,7 @@ INC := -Isrc/include
 
 CFLAGS += -DVERSION=\"$(GIT_VERSION)\" -DVERSION_SHA1=\"$(GIT_VERSION_SHA1)\"
 
-TARGET = build/hyperkit
+TARGET = build/com.docker.hyperkit
 
 all: $(TARGET) | build
 
@@ -160,7 +160,7 @@ $(SRC): src/include/xhyve/dtrace.h
 build/%.o: src/%.c
 	@echo cc $<
 	@mkdir -p $(dir $@)
-	$(VERBOSE) $(ENV) $(CC) $(CFLAGS) $(INC) $(DEF) -O0 -MMD -MT $@ -MF build/$*.d -o $@ -c $<
+	$(VERBOSE) $(ENV) $(CC) $(CFLAGS) $(INC) $(DEF) -O2 -MMD -MT $@ -MF build/$*.d -o $@ -c $<
 
 $(OCAML_C_SRC:src/%.c=build/%.o): CFLAGS += -I$(OCAML_WHERE)
 build/%.o: src/%.ml
@@ -169,14 +169,15 @@ build/%.o: src/%.ml
 	$(VERBOSE) $(ENV) ocamlfind ocamlopt -thread -package "$(OCAML_PACKS)" -c $< -o build/$*.cmx
 	$(VERBOSE) $(ENV) ocamlfind ocamlopt -thread -linkpkg -package "$(OCAML_PACKS)" -output-obj -o $@ build/$*.cmx
 
-$(TARGET).sym: $(OBJ)
+$(TARGET): $(OBJ)
 	@echo ld $(notdir $@)
 	$(VERBOSE) $(ENV) $(LD) $(LDFLAGS) -g -Xlinker $(TARGET).lto.o -o $@ $(OBJ) $(LDLIBS) $(OCAML_LDLIBS)
 	@echo dsym $(notdir $(TARGET).dSYM)
 	$(VERBOSE) $(ENV) $(DSYM) $@ -o $(TARGET).dSYM
-
-$(TARGET): $(TARGET).sym
 	@echo strip $(notdir $@)
+	cp build/com.docker.hyperkit ../../docker/pinata/mac/gui/resources/OSX/Contents/Resources/bin/com.docker.hyperkit
+	rm -rf ../../docker/pinata/mac/gui/resources/OSX/Contents/Resources/bin/com.docker.hyperkit.dSYM
+	cp -R build/com.docker.hyperkit.dSYM ../../docker/pinata/mac/gui/resources/OSX/Contents/Resources/bin/com.docker.hyperkit.dSYM
 
 clean:
 	@rm -rf build
