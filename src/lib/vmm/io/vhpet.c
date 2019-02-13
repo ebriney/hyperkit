@@ -695,7 +695,7 @@ vhpet_init(struct vm *vm)
 	struct vhpet_callout_arg *arg;
 	struct bintime bt;
 
-	vhpet = malloc(sizeof(struct vhpet));
+	vhpet = malloc_log(sizeof(struct vhpet));
 	assert(vhpet);
 	bzero(vhpet, sizeof(struct vhpet));
 	vhpet->vm = vm;
@@ -738,7 +738,7 @@ vhpet_cleanup(struct vhpet *vhpet)
 	for (i = 0; i < VHPET_NUM_TIMERS; i++)
 		callout_drain(&vhpet->timer[i].callout);
 
-	free(vhpet);
+	free_log(vhpet);
 }
 
 int

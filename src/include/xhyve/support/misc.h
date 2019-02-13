@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mman.h>
 
 #define UNUSED __attribute__ ((unused))
 #define CTASSERT(x) _Static_assert ((x), "CTASSERT")
@@ -91,4 +92,42 @@ static inline void xpthread_mutex_unlock(pthread_mutex_t *mutex)
 	if (__builtin_expect(rc != 0, 0))
 		xhyve_abort("pthread_mutex_unlock failed: %d: %s\n",
 			    rc, strerror(rc));
+}
+
+#define calloc_log(count, size) calloc_log_with_caller(count, size, __func__)
+inline	void *calloc_log_with_caller(size_t count, size_t size, char const * caller_name)
+{
+	void* r = calloc(count, size);
+	fprintf(stderr, "hyperkit_mem_log '%s' calloc %ld : %p\n", caller_name, count*size, r);
+	return r;
+}
+
+#define malloc_log(count) malloc_log_with_caller(count, __func__)
+inline	void *malloc_log_with_caller(size_t count, char const * caller_name)
+{
+	void* r = malloc(count);
+	fprintf(stderr, "hyperkit_mem_log '%s' malloc %ld : %p\n", caller_name, count, r);
+	return r;
+}
+
+#define free_log(ptr) free_log_with_caller(ptr, __func__)
+inline void free_log_with_caller(void *ptr, char const * caller_name)
+{
+	fprintf(stderr, "hyperkit_mem_log '%s' free %p\n", caller_name, ptr);
+	free(ptr);
+}
+
+#define mmap_log(a, b, c, d, e, f) mmap_log_with_caller(a, b, c, d, e, f, __func__)
+inline void *mmap_log_with_caller(void *a, size_t b, int c, int d, int e, off_t f, char const * caller_name)
+{
+	void* r = mmap(a,b,c,d,e,f);
+	fprintf(stderr, "hyperkit_mem_log '%s' mmap %ld : %p\n", caller_name, b, r);
+	return r;
+}
+
+#define munmap_log(a, b) munmap_log_with_caller(a, b, __func__)
+inline int munmap_log_with_caller(void *a, size_t b, char const * caller_name)
+{
+	fprintf(stderr, "hyperkit_mem_log '%s' munmap %p\n", caller_name, a);
+	return munmap(a,b);
 }

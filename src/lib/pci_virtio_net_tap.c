@@ -584,7 +584,7 @@ pci_vtnet_init(struct pci_devinst *pi, char *opts)
 	pthread_t sthrd;
 #endif
 
-	sc = calloc(1, sizeof(struct pci_vtnet_softc));
+	sc = calloc_log(1, sizeof(struct pci_vtnet_softc));
 
 	pthread_mutex_init(&sc->vsc_mtx, NULL);
 
@@ -616,7 +616,7 @@ pci_vtnet_init(struct pci_devinst *pi, char *opts)
 		if (vtopts != NULL) {
 			err = pci_vtnet_parsemac(vtopts, sc->vsc_config.mac);
 			if (err != 0) {
-				free(devname);
+				free_log(devname);
 				return (err);
 			}
 			mac_provided = 1;
@@ -625,7 +625,7 @@ pci_vtnet_init(struct pci_devinst *pi, char *opts)
 		strcpy(tbuf, "/dev/");
 		strlcat(tbuf, devname, sizeof(tbuf));
 
-		free(devname);
+		free_log(devname);
 
 		sc->vsc_tapfd = open(tbuf, O_RDWR);
 		if (sc->vsc_tapfd == -1) {

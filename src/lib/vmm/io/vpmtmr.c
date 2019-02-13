@@ -54,7 +54,7 @@ vpmtmr_init(UNUSED struct vm *vm)
 	struct vpmtmr *vpmtmr;
 	struct bintime bt;
 
-	vpmtmr = malloc(sizeof(struct vpmtmr));
+	vpmtmr = malloc_log(sizeof(struct vpmtmr));
 	assert(vpmtmr);
 	bzero(vpmtmr, sizeof(struct vpmtmr));
 	vpmtmr->baseuptime = sbinuptime();
@@ -70,7 +70,7 @@ void
 vpmtmr_cleanup(struct vpmtmr *vpmtmr)
 {
 
-	free(vpmtmr);
+	free_log(vpmtmr);
 }
 
 int

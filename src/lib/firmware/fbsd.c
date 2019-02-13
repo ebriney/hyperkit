@@ -451,9 +451,9 @@ cb_open(UNUSED void *arg, const char *filename, void **hp)
 	if (path[strlen(path) - 1] == '/')
 		path[strlen(path) - 1] = 0;
 	strlcat(path, filename, PATH_MAX);
-	cf = malloc(sizeof(struct cb_file));
+	cf = malloc_log(sizeof(struct cb_file));
 	if (stat(path, &cf->cf_stat) < 0) {
-		free(cf);
+		free_log(cf);
 		return (errno);
 	}
 
@@ -476,7 +476,7 @@ cb_open(UNUSED void *arg, const char *filename, void **hp)
 	}
 
 out:
-	free(cf);
+	free_log(cf);
 	return (EINVAL);
 }
 
@@ -489,7 +489,7 @@ out:
 // 		closedir(cf->cf_u.dir);
 // 	else
 // 		close(cf->cf_u.fd);
-// 	free(cf);
+// 	free_log(cf);
 //
 // 	return (0);
 // }
@@ -815,7 +815,7 @@ addenv(const char *str)
 {
 	struct env *env;
 
-	env = malloc(sizeof(struct env));
+	env = malloc_log(sizeof(struct env));
 	env->str = str;
 	SLIST_INSERT_HEAD(&envhead, env, next);
 }

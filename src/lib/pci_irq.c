@@ -248,7 +248,7 @@ pirq_dsdt(void)
 		else {
 			old = irq_prs;
 			asprintf(&irq_prs, "%s,%d", old, irq);
-			free(old);
+			free_log(old);
 		}
 	}
 
@@ -334,6 +334,6 @@ pirq_dsdt(void)
 		dsdt_line("  }");
 		dsdt_line("}");
 	}
-	free(irq_prs);
+	free_log(irq_prs);
 }
 LPC_DSDT(pirq_dsdt);

@@ -452,7 +452,7 @@ vioapic_init(struct vm *vm)
 	int i;
 	struct vioapic *vioapic;
 
-	vioapic = malloc(sizeof(struct vioapic));
+	vioapic = malloc_log(sizeof(struct vioapic));
 	assert(vioapic);
 	bzero(vioapic, sizeof(struct vioapic));
 	vioapic->vm = vm;
@@ -469,7 +469,7 @@ vioapic_init(struct vm *vm)
 void
 vioapic_cleanup(struct vioapic *vioapic)
 {
-	free(vioapic);
+	free_log(vioapic);
 }
 
 int

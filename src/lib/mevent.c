@@ -205,7 +205,7 @@ mevent_build(UNUSED int mfd, struct kevent *kev)
 		LIST_REMOVE(mevp, me_list);
 
 		if (mevp->me_state == MEV_DEL_PENDING) {
-			free(mevp);
+			free_log(mevp);
 		} else {
 			LIST_INSERT_HEAD(&global_head, mevp, me_list);
 		}
@@ -267,7 +267,7 @@ mevent_add(int tfd, enum ev_type type,
 	/*
 	 * Allocate an entry, populate it, and add it to the change list.
 	 */
-	mevp = calloc(1, sizeof(struct mevent));
+	mevp = calloc_log(1, sizeof(struct mevent));
 	if (mevp == NULL) {
 		goto exit;
 	}

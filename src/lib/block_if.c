@@ -541,7 +541,7 @@ blockif_thr(void *arg)
 
 	bc = arg;
 	if (bc->bc_isgeom)
-		buf = malloc(MAXPHYS);
+		buf = malloc_log(MAXPHYS);
 	else
 		buf = NULL;
 	t = pthread_self();
@@ -564,7 +564,7 @@ blockif_thr(void *arg)
 	pthread_mutex_unlock(&bc->bc_mtx);
 
 	if (buf)
-		free(buf);
+		free_log(buf);
 	pthread_exit(NULL);
 	return (NULL);
 }
@@ -741,7 +741,7 @@ blockif_open(const char *optstr, const char *ident, int ro)
 	/* delete_alignment is a power of 2 allowing us to use ALIGNDOWN for rounding */
 	assert((delete_alignment & (delete_alignment - 1)) == 0);
 
-	if ((delete_zero_buf = malloc(delete_alignment)) == NULL){
+	if ((delete_zero_buf = malloc_log(delete_alignment)) == NULL){
 		perror("Failed to allocate zeroed buffer for unaligned deletes");
 		goto err;
 	}
@@ -818,9 +818,9 @@ blockif_open(const char *optstr, const char *ident, int ro)
 		psectoff = 0;
 	}
 
-	bc = calloc(1, sizeof(struct blockif_ctxt));
+	bc = calloc_log(1, sizeof(struct blockif_ctxt));
 	if (bc == NULL) {
-		perror("calloc");
+		perror("calloc_log");
 		goto err;
 	}
 
@@ -1028,7 +1028,7 @@ blockif_close(struct blockif_ctxt *bc)
 	 */
 	bc->bc_magic = 0;
 	block_close(bc);
-	free(bc);
+	free_log(bc);
 
 	return (0);
 }

@@ -65,7 +65,7 @@ void
 vmm_mem_free(uint64_t gpa, size_t size, void *object)
 {
 	hv_vm_unmap(gpa, size);
-	free(object);
+	free_log(object);
 }
 
 void

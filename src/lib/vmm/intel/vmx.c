@@ -609,7 +609,7 @@ vmx_vm_init(struct vm *vm)
 {
 	struct vmx *vmx;
 
-	vmx = malloc(sizeof(struct vmx));
+	vmx = malloc_log(sizeof(struct vmx));
 	assert(vmx);
 	bzero(vmx, sizeof(struct vmx));
 	vmx->vm = vm;
@@ -2253,7 +2253,7 @@ vmx_vm_cleanup(void *arg)
 {
 	struct vmx *vmx = arg;
 
-	free(vmx);
+	free_log(vmx);
 
 	return;
 }
@@ -2745,7 +2745,7 @@ vmx_vlapic_init(void *arg, int vcpuid)
 
 	vmx = arg;
 
-	vlapic = malloc(sizeof(struct vlapic_vtx));
+	vlapic = malloc_log(sizeof(struct vlapic_vtx));
 	assert(vlapic);
 	bzero(vlapic, sizeof(struct vlapic));
 	vlapic->vm = vmx->vm;
@@ -2764,7 +2764,7 @@ static void
 vmx_vlapic_cleanup(UNUSED void *arg, struct vlapic *vlapic)
 {
 	vlapic_cleanup(vlapic);
-	free(vlapic);
+	free_log(vlapic);
 }
 
 static void

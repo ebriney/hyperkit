@@ -415,7 +415,7 @@ vatpit_init(struct vm *vm)
 	struct vatpit_callout_arg *arg;
 	int i;
 
-	vatpit = malloc(sizeof(struct vatpit));
+	vatpit = malloc_log(sizeof(struct vatpit));
 	assert(vatpit);
 	bzero(vatpit, sizeof(struct vatpit));
 	vatpit->vm = vm;
@@ -443,5 +443,5 @@ vatpit_cleanup(struct vatpit *vatpit)
 	for (i = 0; i < 3; i++)
 		callout_drain(&vatpit->channel[i].callout);
 
-	free(vatpit);
+	free_log(vatpit);
 }

@@ -45,6 +45,7 @@
 #include <xhyve/support/ns16550.h>
 #include <xhyve/mevent.h>
 #include <xhyve/uart_emul.h>
+#include <xhyve/support/misc.h>
 
 #define	COM1_BASE	0x3F8
 #define COM1_IRQ	4
@@ -310,7 +311,7 @@ uart_mapring(struct uart_softc *sc, const char *path)
 		perror("ftruncate console-ring");
 		goto out;
 	}
-	if ((sc->log.ring = (unsigned char*)mmap(NULL, sc->log.length, PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) {
+	if ((sc->log.ring = (unsigned char*)mmap_log(NULL, sc->log.length, PROT_WRITE, MAP_SHARED, fd, 0)) == MAP_FAILED) {
 		perror("mmap console-ring");
 		goto out;
 	}
@@ -651,7 +652,7 @@ uart_init(uart_intr_func_t intr_assert, uart_intr_func_t intr_deassert,
 {
 	struct uart_softc *sc;
 
-	sc = calloc(1, sizeof(struct uart_softc));
+	sc = calloc_log(1, sizeof(struct uart_softc));
 
 	sc->arg = arg;
 	sc->intr_assert = intr_assert;
@@ -799,7 +800,7 @@ uart_set_backend(struct uart_softc *sc, const char *backend, const char *devname
 err:
 	if (sc->tty.fd != -1) close(sc->tty.fd);
 out:
-	if (linkname) free(linkname);
-	if (logname) free(logname);
+	if (linkname) free_log(linkname);
+	if (logname) free_log(logname);
 	return (retval);
 }

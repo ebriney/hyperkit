@@ -771,7 +771,7 @@ vatpic_init(struct vm *vm)
 {
 	struct vatpic *vatpic;
 
-	vatpic = malloc(sizeof(struct vatpic));
+	vatpic = malloc_log(sizeof(struct vatpic));
 	assert(vatpic);
 	bzero(vatpic, sizeof(struct vatpic));
 	vatpic->vm = vm;
@@ -784,5 +784,5 @@ vatpic_init(struct vm *vm)
 void
 vatpic_cleanup(struct vatpic *vatpic)
 {
-	free(vatpic);
+	free_log(vatpic);
 }

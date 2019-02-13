@@ -325,7 +325,7 @@ pci_vt9p_thread(void *vsc)
 	snprintf(ident, sizeof(ident), "9p:%s", sc->v9sc_cfg.tag);
 	pthread_setname_np(ident);
 
-	buf = calloc(1, BUFSIZE);
+	buf = calloc_log(1, BUFSIZE);
 	if (! buf) {
 		fprintf(stderr, "virtio-p9: memory allocation failed\n");
 		_exit(1);
@@ -445,7 +445,7 @@ pci_vt9p_init(struct pci_devinst *pi, char *opts)
 	char *path = "";
 	char *tag = "plan9";
 
-	sc = calloc(1, sizeof(struct pci_vt9p_softc));
+	sc = calloc_log(1, sizeof(struct pci_vt9p_softc));
 	if (! sc) {
 		return 1;
 	}

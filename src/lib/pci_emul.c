@@ -199,7 +199,7 @@ pci_parse_slot(char *opt)
 	}
 
 	if (pci_businfo[bnum] == NULL)
-		pci_businfo[bnum] = calloc(1, sizeof(struct businfo));
+		pci_businfo[bnum] = calloc_log(1, sizeof(struct businfo));
 
 	bi = pci_businfo[bnum];
 	si = &bi->slotinfo[snum];
@@ -222,7 +222,7 @@ pci_parse_slot(char *opt)
 
 done:
 	if (error)
-		free(str);
+		free_log(str);
 
 	return (error);
 }
@@ -717,7 +717,7 @@ pci_emul_init(struct pci_devemu *pde, int bus, int slot,
 	struct pci_devinst *pdi;
 	int err;
 
-	pdi = calloc(1, sizeof(struct pci_devinst));
+	pdi = calloc_log(1, sizeof(struct pci_devinst));
 
 	pdi->pi_bus = (uint8_t)bus;
 	pdi->pi_slot = (uint8_t)slot;
@@ -741,7 +741,7 @@ pci_emul_init(struct pci_devemu *pde, int bus, int slot,
 	if (err == 0)
 		fi->fi_devi = pdi;
 	else
-		free(pdi);
+		free_log(pdi);
 
 	return (err);
 }
@@ -809,7 +809,7 @@ pci_msix_table_init(struct pci_devinst *pi, int table_entries)
 	assert(table_entries <= MAX_MSIX_TABLE_ENTRIES);
 
 	table_size = table_entries * MSIX_TABLE_ENTRY_SIZE;
-	pi->pi_msix.table = calloc(1, (size_t)table_size);
+	pi->pi_msix.table = calloc_log(1, (size_t)table_size);
 
 	/* set mask bit of vector control register */
 	for (i = 0; i < table_entries; i++)
@@ -1207,7 +1207,7 @@ pci_pirq_prt_entry(UNUSED int bus, int slot, int pin, int pirq_pin,
 	dsdt_line("    %s,", name);
 	dsdt_line("    0x00");
 	dsdt_line("  },");
-	free(name);
+	free_log(name);
 }
 
 /*
@@ -1969,7 +1969,7 @@ pci_emul_dinit(struct pci_devinst *pi, UNUSED char *opts)
 	int error;
 	struct pci_emul_dsoftc *sc;
 
-	sc = calloc(1, sizeof(struct pci_emul_dsoftc));
+	sc = calloc_log(1, sizeof(struct pci_emul_dsoftc));
 
 	pi->pi_arg = sc;
 

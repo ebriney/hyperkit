@@ -2012,7 +2012,7 @@ pci_ahci_ioreq_init(struct ahci_port *pr)
 	int i;
 
 	pr->ioqsz = blockif_queuesz(pr->bctx);
-	pr->ioreq = calloc(((size_t) pr->ioqsz), sizeof(struct ahci_ioreq));
+	pr->ioreq = calloc_log(((size_t) pr->ioqsz), sizeof(struct ahci_ioreq));
 	STAILQ_INIT(&pr->iofhd);
 
 	/*
@@ -2312,7 +2312,7 @@ pci_ahci_init(struct pci_devinst *pi, char *opts, int atapi)
 	dbg = fopen("/tmp/log", "w+");
 #endif
 
-	sc = calloc(1, sizeof(struct pci_ahci_softc));
+	sc = calloc_log(1, sizeof(struct pci_ahci_softc));
 	pi->pi_arg = sc;
 	sc->asc_pi = pi;
 	sc->ports = MAX_PORTS;
@@ -2388,7 +2388,7 @@ open_fail:
 	if (ret) {
 		if (sc->port[0].bctx != NULL)
 			blockif_close(sc->port[0].bctx);
-		free(sc);
+		free_log(sc);
 	}
 
 	return (ret);

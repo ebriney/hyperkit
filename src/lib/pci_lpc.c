@@ -96,7 +96,7 @@ lpc_device_parse(const char *opts)
 
 done:
 	if (error)
-		free(cpy);
+		free_log(cpy);
 
 	return (error);
 }

@@ -102,11 +102,11 @@ pci_uart_init(struct pci_devinst *pi, char *opts)
 	asprintf(&name, "pci uart at %d:%d", pi->pi_slot, pi->pi_func);
 	if (uart_set_backend(sc, opts, name) != 0) {
 		fprintf(stderr, "Unable to initialize backend '%s' for %s\n", opts, name);
-		free(name);
+		free_log(name);
 		return (-1);
 	}
 
-	free(name);
+	free_log(name);
 	return (0);
 }
 

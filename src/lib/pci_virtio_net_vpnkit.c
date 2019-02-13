@@ -423,7 +423,7 @@ vpnkit_create(struct pci_vtnet_softc *sc, const char *opts)
 	struct sockaddr_un addr;
 	struct in_addr preferred_ipv4 = { .s_addr = 0 };
 	int fd;
-	struct vpnkit_state *state = malloc(sizeof(struct vpnkit_state));
+	struct vpnkit_state *state = malloc_log(sizeof(struct vpnkit_state));
 	if (!state) abort();
 	bzero(state, sizeof(struct vpnkit_state));
 	fprintf(stdout, "virtio-net-vpnkit: initialising, opts=\"%s\"\n",
@@ -450,7 +450,7 @@ vpnkit_create(struct pci_vtnet_softc *sc, const char *opts)
 				return 1;
 			}
 			memcpy(&uuid_string[0], &tmp[0], 36);
-			free(tmp);
+			free_log(tmp);
 			tmp = NULL;
 		} else if (strncmp(opts, "macfile=", 8) == 0) {
 			macfile = copy_up_to_comma(opts + 8);
@@ -513,7 +513,7 @@ err:
 		(int)info->mtu);
 
 	if (macfile) {
-		tmp = malloc(PATH_MAX);
+		tmp = malloc_log(PATH_MAX);
 		if (!tmp) abort();
 		snprintf(tmp, PATH_MAX, "%s.tmp", macfile);
 		FILE *f = fopen(tmp, "w");
@@ -1036,7 +1036,7 @@ pci_vtnet_init(struct pci_devinst *pi, char *opts)
 	int mac_provided;
 	pthread_t sthrd;
 
-	sc = calloc(1, sizeof(struct pci_vtnet_softc));
+	sc = calloc_log(1, sizeof(struct pci_vtnet_softc));
 	pthread_mutex_init(&sc->vsc_mtx, NULL);
 
 	vi_softc_linkup(&sc->vsc_vs, &vtnet_vi_consts, sc, pi, sc->vsc_queues);

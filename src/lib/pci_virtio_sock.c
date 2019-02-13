@@ -2267,7 +2267,7 @@ static int open_forward_sockets(struct pci_vtsock_softc *sc,
 
 	rc = 0;
 err:
-	free(guest_forwards);
+	free_log(guest_forwards);
 	return rc;
 
 }
@@ -2355,7 +2355,7 @@ pci_vtsock_init(struct pci_devinst *pi, char *opts)
 	fprintf(stderr, "vsock init %d:%d = %s, guest_cid = "PRIcid"\n\r",
 		pi->pi_slot, pi->pi_func, path, guest_cid);
 
-	sc = calloc(1, sizeof(struct pci_vtsock_softc));
+	sc = calloc_log(1, sizeof(struct pci_vtsock_softc));
 
 	LIST_INIT(&sc->free_list);
 	LIST_INIT(&sc->inuse_list);

@@ -95,7 +95,7 @@ void *
 vmm_stat_alloc(void)
 {
 
-	return (malloc(vst_size));
+	return (malloc_log(vst_size));
 }
 
 void
@@ -108,7 +108,7 @@ vmm_stat_init(void *vp)
 void
 vmm_stat_free(void *vp)
 {
-	free(vp);
+	free_log(vp);
 }
 
 int

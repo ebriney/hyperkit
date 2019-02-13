@@ -153,7 +153,7 @@ pci_vtrnd_init(struct pci_devinst *pi, UNUSED char *opts)
 		return (1);
 	}
 
-	sc = calloc(1, sizeof(struct pci_vtrnd_softc));
+	sc = calloc_log(1, sizeof(struct pci_vtrnd_softc));
 
 	vi_softc_linkup(&sc->vrsc_vs, &vtrnd_vi_consts, sc, pi, &sc->vrsc_vq);
 	sc->vrsc_vs.vs_mtx = &sc->vrsc_mtx;

@@ -39,6 +39,7 @@
 
 #include <xhyve/firmware/multiboot.h>
 #include <xhyve/vmm/vmm_api.h>
+#include <xhyve/support/misc.h>
 
 #define MULTIBOOT_MAGIC 0x1BADB002
 #define MULTIBOOT_SEARCH_END 0x2000
@@ -183,7 +184,7 @@ get_image(char *path, struct image *img)
 	}
 	img->size = (uint32_t)st.st_size;
 
-	img->mapping = mmap(NULL, ROUND_UP(img->size, 4096), PROT_READ, MAP_PRIVATE, fd, 0);
+	img->mapping = mmap_log(NULL, ROUND_UP(img->size, 4096), PROT_READ, MAP_PRIVATE, fd, 0);
 	close(fd);
 	if (img->mapping == (void *)MAP_FAILED)
 		die("multiboot: failed to mmap '%s': %s\n", path, strerror(errno));
@@ -193,7 +194,7 @@ get_image(char *path, struct image *img)
 static int
 put_image(struct image *img)
 {
-	if (munmap(img->mapping, ROUND_UP(img->size, 4096)) < 0)
+	if (munmap_log(img->mapping, ROUND_UP(img->size, 4096)) < 0)
 		die("multiboot: failed to munmap: %s\n", strerror(errno));
 	img->mapping = NULL;
 	img->size = 0;
@@ -442,7 +443,7 @@ multiboot(void)
 
 	// prepare memory for modules info
 	state.modules_count = multiboot_count_modules();
-	state.modules = malloc(sizeof(*state.modules) * state.modules_count);
+	state.modules = malloc_log(sizeof(*state.modules) * state.modules_count);
 	if (state.modules == NULL)
 		die("multiboot: failed to allocate memory for modules info info\n");
 	memset(state.modules, 0, sizeof(*state.modules) * state.modules_count);
@@ -472,7 +473,7 @@ multiboot(void)
 	multiboot_load_data(&state, &state.mbi, sizeof(state.mbi), 0);
 	multiboot_load_data(&state, state.modules, sizeof(*state.modules) * state.modules_count, 0);
 
-	free(state.modules);
-	free(state.cmdline);
+	free_log(state.modules);
+	free_log(state.cmdline);
 	return multiboot_set_guest_state(&state);
 }

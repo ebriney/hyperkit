@@ -327,7 +327,7 @@ vm_create(struct vm **retvm)
 	if (!vmm_initialized)
 		return (ENXIO);
 
-	vm = malloc(sizeof(struct vm));
+	vm = malloc_log(sizeof(struct vm));
 	assert(vm);
 	bzero(vm, sizeof(struct vm));
 	vm->num_mem_segs = 0;
@@ -461,7 +461,7 @@ void
 vm_destroy(struct vm *vm)
 {
 	vm_cleanup(vm, true);
-	free(vm);
+	free_log(vm);
 }
 
 int
@@ -506,7 +506,7 @@ vm_mem_allocated(struct vm *vm, uint64_t gpa)
 }
 
 int
-vm_malloc(struct vm *vm, uint64_t gpa, size_t len)
+vm_malloc_log(struct vm *vm, uint64_t gpa, size_t len)
 {
 	int available, allocated;
 	struct mem_seg *seg;

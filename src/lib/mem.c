@@ -216,7 +216,7 @@ register_mem_int(struct mmio_rb_tree *rbt, struct mem_range *memp)
 
 	err = 0;
 
-	mrp = malloc(sizeof(struct mmio_rb_range));
+	mrp = malloc_log(sizeof(struct mmio_rb_range));
 
 	if (mrp != NULL) {
 		mrp->mr_param = *memp;
@@ -227,7 +227,7 @@ register_mem_int(struct mmio_rb_tree *rbt, struct mem_range *memp)
 			err = mmio_rb_add(rbt, mrp);
 		pthread_rwlock_unlock(&mmio_rwlock);
 		if (err)
-			free(mrp);
+			free_log(mrp);
 	} else
 		err = ENOMEM;
 
@@ -273,7 +273,7 @@ unregister_mem(struct mem_range *memp)
 	pthread_rwlock_unlock(&mmio_rwlock);
 
 	if (entry)
-		free(entry);
+		free_log(entry);
 
 	return (err);
 }

@@ -1077,7 +1077,7 @@ vrtc_init(struct vm *vm)
 	struct rtcdev *rtc;
 	time_t curtime;
 
-	vrtc = malloc(sizeof(struct vrtc));
+	vrtc = malloc_log(sizeof(struct vrtc));
 	assert(vrtc);
 	bzero(vrtc, sizeof(struct vrtc));
 	vrtc->vm = vm;
@@ -1117,5 +1117,5 @@ vrtc_cleanup(struct vrtc *vrtc)
 {
 	callout_drain(&vrtc->callout);
 	mach_port_deallocate(mach_task_self(), mach_clock);
-	free(vrtc);
+	free_log(vrtc);
 }

@@ -157,7 +157,7 @@ setup_memory_segment(uint64_t gpa, size_t len, void **addr)
 	int error;
 
 	vcpu_freeze_all(true);
-	error = vm_malloc(vm, gpa, len);
+	error = vm_malloc_log(vm, gpa, len);
 	if (error == 0) {
 		error = vm_get_memobj(vm, gpa, len, &offset, &object);
 		if (error == 0) {
@@ -176,6 +176,8 @@ xh_vm_setup_memory(size_t len, enum vm_mmap_style vms)
 
 	/* XXX VM_MMAP_SPARSE not implemented yet */
 	assert(vms == VM_MMAP_NONE || vms == VM_MMAP_ALL);
+
+	fprintf(stderr, "xh_vm_setup_memory %ld\n", len);
 
 	mmap_style = vms;
 

@@ -233,7 +233,7 @@ vmn_create(struct pci_vtnet_softc *sc)
 	iface = NULL;
 	iface_status = 0;
 
-	vms = malloc(sizeof(struct vmnet_state));
+	vms = malloc_log(sizeof(struct vmnet_state));
 
 	if (!vms) {
 		return (-1);
@@ -276,7 +276,7 @@ vmn_create(struct pci_vtnet_softc *sc)
 	if (iface == NULL || iface_status != VMNET_SUCCESS) {
 		printf("virtio_net: Could not create vmnet interface, "
 			"permission denied or no entitlement?\n");
-		free(vms);
+		free_log(vms);
 		return (-1);
 	}
 
@@ -702,7 +702,7 @@ pci_vtnet_init(struct pci_devinst *pi, UNUSED char *opts)
 	struct pci_vtnet_softc *sc;
 	int mac_provided;
 
-	sc = calloc(1, sizeof(struct pci_vtnet_softc));
+	sc = calloc_log(1, sizeof(struct pci_vtnet_softc));
 
 	pthread_mutex_init(&sc->vsc_mtx, NULL);
 
